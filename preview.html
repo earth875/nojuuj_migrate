@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juujon 旅遊飲食部落格 - 工業風時尚設計預覽</title>
+    <title>Juujon 旅遊飲食部落格 - 工業風時尚設計預覽 (720px 最佳化)</title>
     <style>
         :root {
             --primary-dark: #1a1a1a;
@@ -91,7 +91,7 @@
 
         /* ===== 主容器與布局 ===== */
         .container {
-            max-width: 1400px;
+            max-width: 1440px;
             margin: 0 auto;
             padding: 2rem 1rem;
             display: grid;
@@ -102,7 +102,7 @@
         /* ===== 文章卡片網格 ===== */
         .articles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 2rem;
         }
 
@@ -125,13 +125,41 @@
             border-left-color: var(--accent-gold);
         }
 
+        /* 文章圖片容器 - 支援響應式圖片 */
+        .article-image-wrapper {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+        }
+
+        /* 圖片比例容器 - 16:9 */
+        .article-image-wrapper.ratio-16-9 {
+            aspect-ratio: 16 / 9;
+        }
+
+        /* 圖片比例容器 - 4:3 */
+        .article-image-wrapper.ratio-4-3 {
+            aspect-ratio: 4 / 3;
+        }
+
+        /* 圖片比例容器 - 1:1 (正方形) */
+        .article-image-wrapper.ratio-1-1 {
+            aspect-ratio: 1 / 1;
+        }
+
+        /* 圖片比例容器 - 3:2 */
+        .article-image-wrapper.ratio-3-2 {
+            aspect-ratio: 3 / 2;
+        }
+
         /* 文章圖片 */
         .article-image {
             width: 100%;
-            height: 240px;
+            height: 100%;
             object-fit: cover;
             transition: var(--transition-smooth);
-            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            display: block;
         }
 
         .article-card:hover .article-image {
@@ -403,13 +431,13 @@
         }
 
         /* ===== 響應式設計 ===== */
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .container {
                 grid-template-columns: 1fr;
             }
 
             .articles-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             }
 
             #header h1 {
@@ -420,10 +448,12 @@
         @media (max-width: 768px) {
             .container {
                 padding: 1.5rem 1rem;
+                max-width: 100%;
             }
 
             .articles-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 1.5rem;
             }
 
             nav ul {
@@ -477,11 +507,8 @@
             }
 
             .articles-grid {
+                grid-template-columns: 1fr;
                 gap: 1.5rem;
-            }
-
-            .article-image {
-                height: 200px;
             }
 
             .article-title {
@@ -522,7 +549,7 @@
             padding: 1rem;
             margin: 2rem 1rem;
             border-radius: 4px;
-            max-width: 1400px;
+            max-width: 1440px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -531,6 +558,16 @@
             color: var(--primary-dark);
             margin: 0;
             font-weight: 500;
+        }
+
+        .image-spec {
+            background: #f0f0f0;
+            padding: 0.3rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 0.3rem;
+            display: block;
         }
     </style>
 </head>
@@ -554,23 +591,26 @@
 
     <!-- 演示提示 -->
     <div class="demo-notice">
-        <p>✨ 工業風時尚設計預覽 - 在不同設備上拖曳視窗邊緣來查看響應式效果</p>
+        <p>✨ 工業風時尚設計預覽 (720px 最佳化) - 圖片尺寸範例：720×480、480×720、640×640 | 拖拽視窗邊緣查看響應式效果</p>
     </div>
 
     <!-- 主容器 -->
     <div class="container">
         <!-- 文章網格 -->
         <main class="articles-grid">
-            <!-- 文章 1 -->
+            <!-- 文章 1: 720x480 橫向 -->
             <article class="article-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='240'%3E%3Crect fill='%23d4af37' width='400' height='240'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%231a1a1a' font-weight='bold'%3E東京美食之旅%3C/text%3E%3C/svg%3E" alt="東京美食之旅" class="article-image">
+                <div class="article-image-wrapper ratio-3-2">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='720' height='480'%3E%3Crect fill='%23d4af37' width='720' height='480'/%3E%3Ctext x='50%25' y='30%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%231a1a1a' font-weight='bold'%3E720×480%3C/text%3E%3Ctext x='50%25' y='70%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%231a1a1a'%3E東京美食之旅%3C/text%3E%3C/svg%3E" alt="東京美食之旅" class="article-image">
+                </div>
                 <div class="article-content">
                     <h2 class="article-title">東京必吃美食清單</h2>
+                    <span class="image-spec">📷 圖片: 720×480 (3:2)</span>
                     <div class="article-meta">
                         <div class="meta-item">📅 <span class="meta-badge">2026-04-25</span></div>
                         <div class="meta-item">📍 <span class="meta-badge">東京</span></div>
                     </div>
-                    <p class="article-excerpt">探索東京的米其林餐廳、居酒屋和隱藏版美食巷弄。從築地市場的新鮮海鮮到銀座的懷石料理，讓我帶你發現真正的日本味道...</p>
+                    <p class="article-excerpt">探索東京的米其林餐廳、居酒屋和隱藏版美食角落。從築地市場的新鮮海鮮到銀座的懷石料理，讓我帶你發現真正的日本味道...</p>
                     <div class="article-tags">
                         <span class="tag">#美食探險</span>
                         <span class="tag">#日本</span>
@@ -580,11 +620,14 @@
                 </div>
             </article>
 
-            <!-- 文章 2 -->
+            <!-- 文章 2: 480x720 縱向 -->
             <article class="article-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='240'%3E%3Crect fill='%237a7a7a' width='400' height='240'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%23fff' font-weight='bold'%3E曼谷街頭美食%3C/text%3E%3C/svg%3E" alt="曼谷街頭美食" class="article-image">
+                <div class="article-image-wrapper ratio-4-3">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='720'%3E%3Crect fill='%237a7a7a' width='480' height='720'/%3E%3Ctext x='50%25' y='30%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%23fff' font-weight='bold'%3E480×720%3C/text%3E%3Ctext x='50%25' y='70%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%23fff'%3E曼谷街頭美食%3C/text%3E%3C/svg%3E" alt="曼谷街頭美食" class="article-image">
+                </div>
                 <div class="article-content">
                     <h2 class="article-title">曼谷夜市完全攻略</h2>
+                    <span class="image-spec">📷 圖片: 480×720 (4:3)</span>
                     <div class="article-meta">
                         <div class="meta-item">📅 <span class="meta-badge">2026-04-20</span></div>
                         <div class="meta-item">📍 <span class="meta-badge">泰國</span></div>
@@ -599,11 +642,14 @@
                 </div>
             </article>
 
-            <!-- 文章 3 -->
+            <!-- 文章 3: 640x640 正方形 -->
             <article class="article-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='240'%3E%3Crect fill='%231a1a1a' width='400' height='240'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%23d4af37' font-weight='bold'%3E台北隱藏版咖啡廳%3C/text%3E%3C/svg%3E" alt="台北隱藏版咖啡廳" class="article-image">
+                <div class="article-image-wrapper ratio-1-1">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Crect fill='%231a1a1a' width='640' height='640'/%3E%3Ctext x='50%25' y='30%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%23d4af37' font-weight='bold'%3E640×640%3C/text%3E%3Ctext x='50%25' y='70%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%23d4af37'%3E台北隱藏版咖啡廳%3C/text%3E%3C/svg%3E" alt="台北隱藏版咖啡廳" class="article-image">
+                </div>
                 <div class="article-content">
                     <h2 class="article-title">台北必去咖啡廳</h2>
+                    <span class="image-spec">📷 圖片: 640×640 (1:1 正方形)</span>
                     <div class="article-meta">
                         <div class="meta-item">📅 <span class="meta-badge">2026-04-15</span></div>
                         <div class="meta-item">📍 <span class="meta-badge">台北</span></div>
@@ -618,16 +664,19 @@
                 </div>
             </article>
 
-            <!-- 文章 4 -->
+            <!-- 文章 4: 720x480 橫向 -->
             <article class="article-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='240'%3E%3Crect fill='%23d4af37' width='400' height='240'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%231a1a1a' font-weight='bold'%3E首爾K-Food之旅%3C/text%3E%3C/svg%3E" alt="首爾K-Food之旅" class="article-image">
+                <div class="article-image-wrapper ratio-3-2">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='720' height='480'%3E%3Crect fill='%23d4af37' width='720' height='480'/%3E%3Ctext x='50%25' y='30%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%231a1a1a' font-weight='bold'%3E720×480%3C/text%3E%3Ctext x='50%25' y='70%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%231a1a1a'%3E首爾K-Food之旅%3C/text%3E%3C/svg%3E" alt="首爾K-Food之旅" class="article-image">
+                </div>
                 <div class="article-content">
                     <h2 class="article-title">首爾道地韓食體驗</h2>
+                    <span class="image-spec">📷 圖片: 720×480 (3:2)</span>
                     <div class="article-meta">
                         <div class="meta-item">📅 <span class="meta-badge">2026-04-10</span></div>
                         <div class="meta-item">📍 <span class="meta-badge">韓國</span></div>
                     </div>
-                    <p class="article-excerpt">不只是泡菜和烤肉！深入首爾傳統市場和在地食堂，品嚐正統韓食。北村韓屋村、鐘路、南大門...美食地圖完整分享...</p>
+                    <p class="article-excerpt">不只是泡菜和烤肉！深入首爾傳統市場和在地食堂，品嚐正統韓食。北村韓屋村、鍾路、南大門...美食地圖完整分享...</p>
                     <div class="article-tags">
                         <span class="tag">#韓食</span>
                         <span class="tag">#首爾</span>
@@ -637,11 +686,14 @@
                 </div>
             </article>
 
-            <!-- 文章 5 -->
+            <!-- 文章 5: 480x720 縱向 -->
             <article class="article-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='240'%3E%3Crect fill='%237a7a7a' width='400' height='240'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%23fff' font-weight='bold'%3E新加坡美食天堂%3C/text%3E%3C/svg%3E" alt="新加坡美食天堂" class="article-image">
+                <div class="article-image-wrapper ratio-4-3">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='720'%3E%3Crect fill='%237a7a7a' width='480' height='720'/%3E%3Ctext x='50%25' y='30%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%23fff' font-weight='bold'%3E480×720%3C/text%3E%3Ctext x='50%25' y='70%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%23fff'%3E新加坡美食天堂%3C/text%3E%3C/svg%3E" alt="新加坡美食天堂" class="article-image">
+                </div>
                 <div class="article-content">
                     <h2 class="article-title">新加坡多元美食文化</h2>
+                    <span class="image-spec">📷 圖片: 480×720 (縱向)</span>
                     <div class="article-meta">
                         <div class="meta-item">📅 <span class="meta-badge">2026-04-05</span></div>
                         <div class="meta-item">📍 <span class="meta-badge">新加坡</span></div>
@@ -656,11 +708,14 @@
                 </div>
             </article>
 
-            <!-- 文章 6 -->
+            <!-- 文章 6: 640x640 正方形 -->
             <article class="article-card">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='240'%3E%3Crect fill='%231a1a1a' width='400' height='240'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%23d4af37' font-weight='bold'%3E巴黎美食家文化%3C/text%3E%3C/svg%3E" alt="巴黎美食家文化" class="article-image">
+                <div class="article-image-wrapper ratio-1-1">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Crect fill='%231a1a1a' width='640' height='640'/%3E%3Ctext x='50%25' y='30%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='32' fill='%23d4af37' font-weight='bold'%3E640×640%3C/text%3E%3Ctext x='50%25' y='70%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%23d4af37'%3E巴黎美食家文化%3C/text%3E%3C/svg%3E" alt="巴黎美食家文化" class="article-image">
+                </div>
                 <div class="article-content">
                     <h2 class="article-title">巴黎米其林之旅</h2>
+                    <span class="image-spec">📷 圖片: 640×640 (正方形)</span>
                     <div class="article-meta">
                         <div class="meta-item">📅 <span class="meta-badge">2026-03-28</span></div>
                         <div class="meta-item">📍 <span class="meta-badge">法國</span></div>
@@ -711,7 +766,7 @@
                     </li>
                     <li>
                         <a href="#">
-                            <span>飯店評測</span>
+                            <span>餐廳評測</span>
                             <span class="count">8</span>
                         </a>
                     </li>
@@ -744,7 +799,7 @@
                     <span class="tag">#旅遊</span>
                     <span class="tag">#亞洲</span>
                     <span class="tag">#街頭美食</span>
-                    <span class="tag">#飯店</span>
+                    <span class="tag">#餐廳</span>
                     <span class="tag">#料理</span>
                 </div>
             </div>
@@ -764,7 +819,7 @@
     <footer>
         <p><strong>🌍 Juujon Travel & Food Blog</strong></p>
         <p>分享旅遊冒險和美食發現 | Sharing travel adventures and culinary discoveries</p>
-        <div class="copyright">© 2026 Juujon. All rights reserved. | 工業風時尚設計 v1.0</div>
+        <div class="copyright">© 2026 Juujon. All rights reserved. | 工業風時尚設計 v2.0 (720px 最佳化)</div>
     </footer>
 </body>
 </html>
