@@ -1,0 +1,38 @@
+name: Batch Plate Image Cropper
+
+on:
+  workflow_dispatch:
+
+jobs:
+  process-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 取得程式碼
+        uses: actions/checkout@v4
+
+      - name: 🐍 設定 Python 環境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 📦 安裝依賴套件
+        run: |
+          python -m pip install --upgrade pip
+          pip install opencv-python-headless numpy Pillow pillow-heif
+
+      - name: 📁 準備資料夾與測試資料
+        # 自動建立輸入與輸出資料夾，並把根目錄的範例圖片移進去
+        run: |
+          mkdir -p input_images output_images
+          mv IMG_1450.HEIC input_images/ || echo "沒有找到預設測試圖片"
+
+      - name: 🖼️ 執行批次裁切腳本
+        run: python batch_trim_to_circle.py
+
+      - name: 📤 上傳裁切後的結果
+        uses: actions/upload-artifact@v4
+        with:
+          name: cropped-images-result
+          path: output_images/  # 改為直接上傳整個輸出資料夾
+          if-no-files-found: warn
