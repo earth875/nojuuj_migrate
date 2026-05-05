@@ -23,7 +23,7 @@ jobs:
 
       - name: 🖼️ 執行裁切腳本
         # 這裡假設你的專案根目錄有一張 IMG_1450.HEIC 且腳本名為 crop_plate.py
-        run: python crop_plate.py
+        run: python trim_to_circle.py
 
       - name: 📤 上傳裁切後的結果
         uses: actions/upload-artifact@v4
