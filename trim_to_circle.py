@@ -50,7 +50,7 @@ def crop_to_circle_bounding_box(image_path, output_path):
         print("⚠️ 無法檢測到明顯的圓盤，請嘗試調整 HoughCircles 參數。")
 
 if __name__ == "__main__":
-    input_file = "input.HEIC"
+    input_file = "input.heic"
     output_file = "cropped_plate.jpg"
     
     if os.path.exists(input_file):
