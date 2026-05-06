@@ -3,6 +3,10 @@ name: Batch Plate Image Cropper
 on:
   workflow_dispatch:
 
+# 授權 GitHub Actions 可以寫入 (Push) 變更到這個儲存庫
+permissions:
+  contents: write
+
 jobs:
   process-images:
     runs-on: ubuntu-latest
@@ -21,18 +25,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install opencv-python-headless numpy Pillow pillow-heif
 
-      - name: 📁 準備資料夾與測試資料
-        # 自動建立輸入與輸出資料夾，並把根目錄的範例圖片移進去
+      - name: 📁 準備資料夾
         run: |
-          mkdir -p input_images output_images
-          mv IMG_1450.HEIC input_images/ || echo "沒有找到預設測試圖片"
+          mkdir -p input_images/archive output_images
 
       - name: 🖼️ 執行批次裁切腳本
         run: python batch_trim_to_circle.py
 
-      - name: 📤 上傳裁切後的結果
+      - name: 💾 將搬移與清理的結果存回 GitHub
+        # 設定機器人身份，把 input_images 裡的變更 (包含移動到 archive 和刪除) 推送回 GitHub
+        # 只有當有檔案變更時才 commit，否則跳過避免報錯
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add input_images/
+          
+          git commit -m "🤖 自動處理圖片：封存至 archive 並清理 14 天前舊檔" || echo "無檔案變更需要提交"
+          git push
+
+      - name: 📤 上傳裁切後的結果給使用者下載
         uses: actions/upload-artifact@v4
         with:
           name: cropped-images-result
-          path: output_images/  # 改為直接上傳整個輸出資料夾
+          path: output_images/
           if-no-files-found: warn
