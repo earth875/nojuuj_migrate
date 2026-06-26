@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:dynamicViews='true' b:version='2' class='v2' expr:dir='data:blog.languageDirection' expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:dynamicViews='true' b:version='2' class='v2' expr:dir='data:blog.languageDirection' expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:expr='http://www.google.com/2005/gml/expr'>
   <head>
     <b:include data='blog' name='all-head-content'/>
     <title><data:blog.pageTitle/></title>
@@ -10,7 +10,7 @@
     <meta content='initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width' name='viewport'/>
     <b:skin><![CDATA[/*-----------------------------------------------
 Blogger Template Style
-Name: Dynamic Views
+Name: Dynamic Views with Hierarchical Categories
 ----------------------------------------------- */
 
 /* Variable definitions
@@ -188,7 +188,7 @@ Name: Dynamic Views
 
     <script expr:src='data:blog.dynamicViewsScriptSrc + &quot;/js/common.js&quot;' type='text/javascript'/>
     <b:if cond='data:blog.localeUnderscoreDelimited != &quot;en&quot;'>
-      <script expr:src='data:blog.dynamicViewsScriptSrc +           &quot;/js/languages/lang__&quot; + data:blog.localeUnderscoreDelimited + &quot;.js&quot;' type='text/javascript'/>
+      <script expr:src='data:blog.dynamicViewsScriptSrc + &quot;/js/languages/lang__&quot; + data:blog.localeUnderscoreDelimited + &quot;.js&quot;' type='text/javascript'/>
     </b:if>
     <b:if cond='data:blog.view'>
       <script expr:src='data:blog.dynamicViewsScriptSrc + &quot;/js/&quot; + data:blog.view + &quot;.js&quot;' type='text/javascript'/>
@@ -205,7 +205,7 @@ Name: Dynamic Views
     </b:if>
     <script expr:src='data:blog.dynamicViewsCommentsSrc'/>
     <b:include data='blog' name='google-analytics'/>
-  	<style>
+    <style>
       /*<![CDATA[*/
       /* 針對 Dynamic views 的暗色高權重環境做專屬優化 */
       .tree-menu, .tree-menu ul { list-style: none !important; padding-left: 18px !important; margin: 0 !important; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
@@ -217,8 +217,173 @@ Name: Dynamic Views
       .sub-menu a { color: #cccccc !important; text-decoration: none !important; font-size: 13px !important; display: inline-block; width: 100%; }
       .sub-menu a:hover { color: #f44336 !important; text-decoration: underline !important; }
       .open > .sub-menu { display: block !important; }
+
+      /* 二階分類標籤樣式 */
+      .post-labels {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .label-badge {
+        display: inline-flex;
+        align-items: center;
+        background-color: #f0f0f0;
+        border-left: 3px solid #009EB8;
+        padding: 4px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+      }
+
+      .label-category {
+        font-weight: bold;
+        color: #555;
+        margin-right: 4px;
+      }
+
+      .label-category::after {
+        content: " > ";
+        margin: 0 3px;
+      }
+
+      .label-subcategory a {
+        color: #009EB8;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .label-subcategory a:hover {
+        color: #f44336;
+        text-decoration: underline;
+      }
+
+      /* 單層標籤樣式 */
+      .label-single {
+        display: inline-block;
+        background-color: #f0f0f0;
+        padding: 4px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+      }
+
+      .label-single a {
+        color: #009EB8;
+        text-decoration: none;
+      }
+
+      .label-single a:hover {
+        color: #f44336;
+        text-decoration: underline;
+      }
+
+      /* 二階分類導航小工具 */
+      .category-tree {
+        margin: 20px 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      .category-group {
+        margin-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+      }
+
+      .category-group:last-child {
+        border-bottom: none;
+      }
+
+      .category-title {
+        margin: 0 0 8px 0;
+        font-weight: bold;
+        font-size: 14px;
+        color: #333;
+        cursor: pointer;
+        padding: 5px 0;
+        user-select: none;
+        display: flex;
+        align-items: center;
+      }
+
+      .category-title:hover {
+        color: #009EB8;
+      }
+
+      .category-toggle {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+        text-align: center;
+        line-height: 16px;
+        font-size: 12px;
+        transition: transform 0.2s;
+      }
+
+      .category-title.collapsed .category-toggle {
+        transform: rotate(-90deg);
+      }
+
+      .subcategory-list {
+        list-style: none;
+        padding-left: 20px;
+        margin: 8px 0 0 0;
+        display: none;
+      }
+
+      .category-group.expanded .subcategory-list {
+        display: block;
+      }
+
+      .subcategory-list li {
+        margin: 5px 0;
+        font-size: 13px;
+      }
+
+      .subcategory-list a {
+        text-decoration: none;
+        color: #666;
+        transition: color 0.2s;
+        display: inline-block;
+        padding: 2px 0;
+      }
+
+      .subcategory-list a:hover {
+        color: #f44336;
+        text-decoration: underline;
+      }
+
+      .subcategory-list a::before {
+        content: "└ ";
+        color: #999;
+        margin-right: 4px;
+      }
+
       /*]]>*/
     </style>
+
+    <!-- 二階分類導航 JavaScript -->
+    <script type='text/javascript'>
+    //<![CDATA[
+    document.addEventListener('DOMContentLoaded', function() {
+      // 二階分類菜單交互
+      var categoryTitles = document.querySelectorAll('.category-title');
+      categoryTitles.forEach(function(title) {
+        title.addEventListener('click', function() {
+          var group = this.closest('.category-group');
+          group.classList.toggle('expanded');
+          this.classList.toggle('collapsed');
+        });
+      });
+
+      // 預設展開第一個分類
+      var firstGroup = document.querySelector('.category-group');
+      if (firstGroup) {
+        firstGroup.classList.add('expanded');
+      }
+    });
+    //]]>
+    </script>
   </head>
   <body>
     <b:if cond='data:blog.isDynamicViewsAvailable'>
@@ -316,13 +481,13 @@ Name: Dynamic Views
       <p><data:blogCommentMessage/></p>
       <data:blogTeamBlogMessage/>
       <a expr:href='data:post.commentFormIframeSrc' id='comment-editor-src'/>
-      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight' frameborder='0' id='comment-editor' name='comment-editor' src='' style='display: none' width='100%'/>
+      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight' frameborder='0' id='comment-editor' name='comment-editor' src='' style='width:100%;'/>
     <b:else/>
       <h4 id='comment-post-message'><data:postCommentMsg/></h4>
       <p><data:blogCommentMessage/></p>
       <data:blogTeamBlogMessage/>
       <a expr:href='data:post.commentFormIframeSrc' id='comment-editor-src'/>
-      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight' frameborder='0' id='comment-editor' name='comment-editor' src='' width='100%'/>
+      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight' frameborder='0' id='comment-editor' name='comment-editor' src='' style='width:100%;'/>
     </b:if>
     <data:post.cmtfpIframe/>
     <script type='text/javascript'>
@@ -522,7 +687,7 @@ Name: Dynamic Views
       </a>
 
       <div class='mobile-index-comment'>
-        <b:include cond='data:blog.pageType != &quot;static_page&quot;                          and data:post.allowComments                          and data:post.numComments != 0' data='post' name='comment_count_picker'/>
+        <b:include cond='data:blog.pageType != &quot;static_page&quot; and data:post.allowComments and data:post.numComments != 0' data='post' name='comment_count_picker'/>
       </div>
     </div>
   </div>
@@ -638,7 +803,7 @@ Name: Dynamic Views
               </span>
 
               <span class='post-comment-link'>
-                <b:include cond='data:blog.pageType not in {&quot;item&quot;,&quot;static_page&quot;}                                  and data:post.allowComments' data='post' name='comment_count_picker'/>
+                <b:include cond='data:blog.pageType not in {&quot;item&quot;,&quot;static_page&quot;} and data:post.allowComments' data='post' name='comment_count_picker'/>
               </span>
             </div>
 
@@ -749,7 +914,7 @@ Name: Dynamic Views
       </span>
 
       <span class='post-comment-link'>
-        <b:include cond='data:blog.pageType not in {&quot;item&quot;,&quot;static_page&quot;}                          and data:post.allowComments' data='post' name='comment_count_picker'/>
+        <b:include cond='data:blog.pageType not in {&quot;item&quot;,&quot;static_page&quot;} and data:post.allowComments' data='post' name='comment_count_picker'/>
       </span>
 
       <span class='post-icons'>
@@ -776,9 +941,22 @@ Name: Dynamic Views
       <div class='post-footer-line post-footer-line-2'>
       <span class='post-labels'>
         <b:if cond='data:top.showPostLabels and data:post.labels'>
-          <data:postLabelsLabel/>
+          <data:postLabelsLabel/>:&#32;
           <b:loop values='data:post.labels' var='label'>
-            <a expr:href='data:label.url' rel='tag'><data:label.name/></a><b:if cond='not data:label.isLast'>,</b:if>
+            <b:var name='labelName' value='data:label.name'/>
+            <b:var name='labelParts' value='data:labelName.split(&quot;-&quot;)'/>
+            <span class='label-badge'>
+              <b:if cond='data:labelParts.length > 1'>
+                <!-- 二階標籤 -->
+                <span class='label-category'><data:labelParts[0]/></span>
+                <span class='label-subcategory'>
+                  <a expr:href='data:label.url' rel='tag'><data:labelParts[1]/></a>
+                </span>
+              <b:else/>
+                <!-- 單層標籤 -->
+                <a expr:href='data:label.url' rel='tag'><data:label.name/></a>
+              </b:if>
+            </span>
           </b:loop>
         </b:if>
       </span>
@@ -818,7 +996,7 @@ Name: Dynamic Views
   </b:if>
 </b:includable>
                               <b:includable id='shareButtons' var='post'>
-  <b:if cond='data:top.showEmailButton'><a class='goog-inline-block share-button sb-email' expr:href='data:post.sharePostUrl + &quot;&amp;target=email&quot;' expr:title='data:top.emailThisMsg' target='_blank'><span class='share-button-link-text'><data:top.emailThisMsg/></span></a></b:if><b:if cond='data:top.showBlogThisButton'><a class='goog-inline-block share-button sb-blog' expr:href='data:post.sharePostUrl + &quot;&amp;target=blog&quot;' expr:onclick='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=270,width=475\&quot;); return false;&quot;' expr:title='data:top.blogThisMsg' target='_blank'><span class='share-button-link-text'><data:top.blogThisMsg/></span></a></b:if><b:if cond='data:top.showTwitterButton'><a class='goog-inline-block share-button sb-twitter' expr:href='data:post.sharePostUrl + &quot;&amp;target=twitter&quot;' expr:title='data:top.shareToTwitterMsg' target='_blank'><span class='share-button-link-text'><data:top.shareToTwitterMsg/></span></a></b:if><b:if cond='data:top.showFacebookButton'><a class='goog-inline-block share-button sb-facebook' expr:href='data:post.sharePostUrl + &quot;&amp;target=facebook&quot;' expr:onclick='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=430,width=640\&quot;); return false;&quot;' expr:title='data:top.shareToFacebookMsg' target='_blank'><span class='share-button-link-text'><data:top.shareToFacebookMsg/></span></a></b:if><b:if cond='data:top.showPinterestButton'><a class='goog-inline-block share-button sb-pinterest' expr:href='data:post.sharePostUrl + &quot;&amp;target=pinterest&quot;' expr:title='data:top.shareToPinterestMsg' target='_blank'><span class='share-button-link-text'><data:top.shareToPinterestMsg/></span></a></b:if>
+  <b:if cond='data:top.showEmailButton'><a class='goog-inline-block share-button sb-email' expr:href='data:post.sharePostUrl + &quot;&amp;target=email&quot;' expr:title='data:top.emailThisMsg' target='_blank'> </a></b:if>
 </b:includable>
                               <b:includable id='status-message'>
   <b:if cond='data:navMessage'>
@@ -842,12 +1020,12 @@ Name: Dynamic Views
       <p><data:blogCommentMessage/></p>
       <data:blogTeamBlogMessage/>
       <a expr:href='data:post.commentFormIframeSrc' id='comment-editor-src'/>
-      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight' frameborder='0' id='comment-editor' name='comment-editor' src='' style='display: none' width='100%'/>
+      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight' frameborder='0' id='comment-editor' name='comment-editor' src='' style='width:100%;'/>
     <b:else/>
       <p><data:blogCommentMessage/></p>
       <data:blogTeamBlogMessage/>
       <a expr:href='data:post.commentFormIframeSrc' id='comment-editor-src'/>
-      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight' frameborder='0' id='comment-editor' name='comment-editor' src='' width='100%'/>
+      <iframe allowtransparency='true' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight' frameborder='0' id='comment-editor' name='comment-editor' src='' style='width:100%;'/>
     </b:if>
     <data:post.cmtfpIframe/>
     <script type='text/javascript'>
@@ -998,618 +1176,43 @@ Name: Dynamic Views
       var hash = (window.location.hash || '#').substring(1);
       var startThread, targetComment;
       if (/^comment-form_/.test(hash)) {
-        startThread = hash.substring('comment-form_'.length);
-      } else if (/^c[0-9]+$/.test(hash)) {
-        targetComment = hash.substring(1);
-      }
-
-      // Configure commenting API:
-      var configJso = {
-        'maxDepth': config.maxThreadDepth
-      };
-      var provider = {
-        'id': config.postId,
-        'data': items,
-        'loadNext': paginator,
-        'hasMore': hasMore,
-        'getMeta': getMeta,
-        'onReply': onReply,
-        'rendered': true,
-        'initComment': targetComment,
-        'initReplyThread': startThread,
-        'config': configJso,
-        'messages': msgs
-      };
-
-      var render = function() {
-        if (window.goog && window.goog.comments) {
-          var holder = document.getElementById('comment-holder');
-          window.goog.comments.render(holder, provider);
+        startThread = parseInt(hash.substring(13), 10);
+        targetComment = document.getElementById(hash);
+        if (targetComment && 'false' == targetComment.value) {
+          document.getElementById('comment-editor').style.display = 'block';
+          onReply(startThread, hash);
         }
-      };
-
-      // render now, or queue to render when library loads:
-      if (window.goog && window.goog.comments) {
-        render();
-      } else {
-        window.goog = window.goog || {};
-        window.goog.comments = window.goog.comments || {};
-        window.goog.comments.loadQueue = window.goog.comments.loadQueue || [];
-        window.goog.comments.loadQueue.push(render);
+      } else if (/^comment-(\d+)_/.test(hash)) {
+        startThread = parseInt(RegExp.$1, 10);
+        onReply(startThread, hash);
+      } else if (/^c(\d+)$/.test(hash)){
+        startThread = parseInt(RegExp.$1, 10);
       }
+      paginator(function(parsed) {
+        var iListă = false, é = '';
+        if (parsed) {
+          for (var i = 0; i < parsed.length; i++) {
+            var comment = parsed[i];
+            if (comment.parentId == startThread || comment.id == startThread ||
+                (startThread == undefined && comment.id == undefined)) {
+              isList = true;
+              break;
+            }
+          }
+        }
+        if (isList){
+          document.getElementById('comment-editor').style.display = 'block';
+          onReply(startThread, hash);
+        }
+      });
+      //]]>
     })();
-// ]]>
   </script>
-</b:includable>
-                              <b:includable id='threaded_comments' var='post'>
-  <div class='comments' id='comments'>
-    <a name='comments'/>
-    <h4><data:post.commentLabelFull/>:</h4>
-
-    <div class='comments-content'>
-      <b:include cond='data:post.embedCommentForm' data='post' name='threaded_comment_js'/>
-      <div id='comment-holder'>
-         <data:post.commentHtml/>
-      </div>
-    </div>
-
-    <p class='comment-footer'>
-      <b:if cond='data:post.allowNewComments'>
-        <b:include data='post' name='threaded-comment-form'/>
-      <b:else/>
-        <data:post.noNewCommentsText/>
-      </b:if>
-    </p>
-
-    <b:if cond='data:showCmtPopup'>
-      <div id='comment-popup'>
-        <iframe allowtransparency='true' frameborder='0' id='comment-actions' name='comment-actions' scrolling='no'>
-        </iframe>
-      </div>
-    </b:if>
-
-    <div id='backlinks-container'>
-    <div expr:id='data:widget.instanceId + &quot;_backlinks-container&quot;'>
-    </div>
-    </div>
-  </div>
-</b:includable>
-                            </b:widget>
-                            <b:widget id='FeaturedPost1' locked='false' title='' type='FeaturedPost'>
-                              <b:widget-settings>
-                                <b:widget-setting name='showSnippet'>true</b:widget-setting>
-                                <b:widget-setting name='showPostTitle'>true</b:widget-setting>
-                                <b:widget-setting name='showFirstImage'>true</b:widget-setting>
-                                <b:widget-setting name='useMostRecentPost'>true</b:widget-setting>
-                              </b:widget-settings>
-                              <b:includable id='main'>
-  <!-- Only display title if it's non-empty -->
-  <b:if cond='data:title != &quot;&quot;'>
-    <h2 class='title'><data:title/></h2>
-  </b:if>
-  <b:include name='content'/>
-
-  <b:include name='quickedit'/>
-</b:includable>
-                              <b:includable id='content'>
-  <div class='post-summary'>
-    <b:if cond='data:showPostTitle and data:postTitle != &quot;&quot;'>
-      <h3><a expr:href='data:postUrl'><data:postTitle/></a></h3>
-    </b:if>
-    <b:if cond='data:showSnippet and data:postSummary != &quot;&quot;'>
-      <p>
-        <data:postSummary/>
-      </p>
-    </b:if>
-    <b:if cond='data:showFirstImage and data:postFirstImage != &quot;&quot;'>
-      <img class='image' expr:src='data:postFirstImage'/>
-    </b:if>
-  </div>
-
-  <style type='text/css'>
-    .image {
-      width: 100%;
-    }
-  </style>
-</b:includable>
-                            </b:widget>
-                            <b:widget id='PopularPosts1' locked='false' title='' type='PopularPosts'>
-                              <b:widget-settings>
-                                <b:widget-setting name='numItemsToShow'>3</b:widget-setting>
-                                <b:widget-setting name='showThumbnails'>true</b:widget-setting>
-                                <b:widget-setting name='showSnippets'>true</b:widget-setting>
-                                <b:widget-setting name='timeRange'>LAST_YEAR</b:widget-setting>
-                              </b:widget-settings>
-                              <b:includable id='main'>
-  <b:if cond='data:title != &quot;&quot;'><h2><data:title/></h2></b:if>
-  <div class='widget-content popular-posts'>
-    <ul>
-      <b:loop values='data:posts' var='post'>
-      <li>
-        <b:if cond='!data:showThumbnails'>
-          <b:if cond='!data:showSnippets'>
-            <!-- (1) No snippet/thumbnail -->
-            <a expr:href='data:post.href'><data:post.title/></a>
-          <b:else/>
-            <!-- (2) Show only snippets -->
-            <div class='item-title'><a expr:href='data:post.href'><data:post.title/></a></div>
-            <div class='item-snippet'><data:post.snippet/></div>
-          </b:if>
-        <b:else/>
-          <!-- (3) Show only thumbnails or (4) Snippets and thumbnails. -->
-          <div expr:class='data:showSnippets ? &quot;item-content&quot; : &quot;item-thumbnail-only&quot;'>
-            <b:if cond='data:post.featuredImage.isResizable or data:post.thumbnail'>
-              <div class='item-thumbnail'>
-                <a expr:href='data:post.href' target='_blank'>
-                  <b:with value='data:post.featuredImage.isResizable                                  ? resizeImage(data:post.featuredImage, 72, &quot;1:1&quot;)                                  : data:post.thumbnail' var='image'>
-                    <img alt='' border='0' expr:src='data:image'/>
-                  </b:with>
-                </a>
-              </div>
-            </b:if>
-            <div class='item-title'><a expr:href='data:post.href'><data:post.title/></a></div>
-            <b:if cond='data:showSnippets'>
-              <div class='item-snippet'><data:post.snippet/></div>
-            </b:if>
-          </div>
-          <div style='clear: both;'/>
-        </b:if>
-      </li>
-      </b:loop>
-    </ul>
-    <b:include name='quickedit'/>
-  </div>
 </b:includable>
                             </b:widget>
                           </b:section>
                         </div>
                       </div>
-                      <div class='column-right-outer'>
-                        <div class='column-right-inner'>
-                          <aside>
-                            <b:section class='sidebar' id='sidebar-right-1' preferred='yes' showaddelement='yes'>
-                              <b:widget id='HTML1' locked='false' title='Try' type='HTML'>
-                                <b:widget-settings>
-                                  <b:widget-setting name='content'><![CDATA[<div class="pixnet-style-category">
-  <ul class="tree-menu">
-    <li>
-      <span class="folder-toggle">➕ 半夜摸黑翻冰箱</span>
-      <ul class="sub-menu">
-        <li><a href="/search/label/半夜摸黑翻冰箱">全部文章</a></li>
-      </ul>
-    </li>
-
-    <li>
-      <span class="folder-toggle">➕ 半夜下油開火爐</span>
-      <ul class="sub-menu">
-        <li><a href="/search/label/半夜下油開火爐">全部文章</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E5%8F%B0%E8%8F%9C%E4%B8%AD%E8%8F%9C">台菜中菜</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E6%AD%90%E9%99%B8%E7%B6%93%E5%85%B8">歐陸經典</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E4%B8%AD%E6%9D%B1%E6%96%99%E7%90%86">中東料理</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E6%97%A5%E5%BC%8F%E5%AE%B6%E5%B8%B8">日式家常</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E7%BE%8E%E5%BC%8F%E9%A2%A8%E5%91%B3">美式風味</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E6%9F%B5%E9%A6%AC%E9%A2%A8%E5%91%B3">星馬風味</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E9%9F%93%E5%BC%8F%E6%96%99%E7%90%86">韓式料理</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E7%94%9C%E5%93%81%E7%B3%96%E6%B0%B4">甜品糖水</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E9%A3%B2%E5%93%81%E8%AA%BF%E9%85%92">飲品調酒</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E5%B0%8F%E9%BB%9E%E9%9B%B6%E5%98%B4">小點零嘴</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E4%B8%8B%E6%B2%B9%E9%96%8B%E7%81%AB%E7%88%96-%E5%AE%A2%E8%A8%AA%E9%86%8D%E9%86%90%E9%A3%9F%E7%8F%8D%E9%8C%84">客訪醍醐食珍錄</a></li>
-      </ul>
-    </li>
-
-    <li>
-      <span class="folder-toggle">➕ 半夜倚窗品香檳</span>
-      <ul class="sub-menu">
-        <li><a href="/search/label/半夜倚窗品香檳">全部文章</a></li>
-      </ul>
-    </li>
-
-    <li>
-      <span class="folder-toggle">➕ 半夜賞月浴風呂</span>
-      <ul class="sub-menu">
-        <li><a href="/search/label/半夜賞月浴風呂">全部文章</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E6%9D%B1%E4%BA%AC%E9%83%BD">東京都</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E7%A5%9E%E5%A5%88%E5%B7%9D%E7%B8%A3">神奈川縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E5%A4%A7%E9%98%AA%E5%BA%9C">大阪府</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E5%85%B5%E5%AC%A2%E7%B8%A3">兵庫縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E5%92%8C%E6%AD%8C%E5%B1%B1%E7%B8%A3">和歌山縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E6%84%9B%E7%9F%A5%E7%B8%A3">愛知縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E9%95%B7%E9%87%8E%E7%B8%A3">長野縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E7%9F%B3%E5%B7%9D%E7%B8%A3">石川縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E5%B2%90%E9%98%9E%E7%B8%A3">岐阜縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E5%9F%BC%E7%8E%89%E7%B8%A3">埼玉縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E7%BE%A4%E9%A6%AC%E7%B8%A3">群馬縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E7%A6%8F%E5%B2%A1%E7%B8%A3">福岡縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E5%A4%A7%E5%88%86%E7%B8%A3">大分縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E7%86%8A%E6%9C%AC%E7%B8%A3">熊本縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E5%AE%AE%E5%B4%8E%E7%B8%A3">宮崎縣</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E5%8C%97%E6%B5%B7%E9%81%93">北海道</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E4%B8%BB%E9%A1%8C%E6%80%A7">主題性</a></li>
-        <li><a href="/search/label/%E5%8D%8A%E5%A4%9C%E8%B3%A2%E6%9C%88%E6%B5%B4%E9%A2%A8%E5%91%8A-%E5%89%8D%E7%BD%AE%E9%9B%9C%E8%A8%98">前置雜記</a></li>
-      </ul>
-    </li>
-
-    <li><span class="folder-toggle">➕ 半夜烤肉酌燒酒</span><ul class="sub-menu"><li><a href="/search/label/半夜烤肉酌燒酒">全部文章</a></li></ul></li>
-    <li><span class="folder-toggle">➕ 半夜施金弄紅波</span><ul class="sub-menu"><li><a href="/search/label/半夜施金弄紅波">全部文章</a></li></ul></li>
-    <li><span class="folder-toggle">➕ 半夜剖椰拂海風</span><ul class="sub-menu"><li><a href="/search/label/半夜剖椰拂海風">全部文章</a></li></ul></li>
-  </ul>
-</div>]]></b:widget-setting>
-                                </b:widget-settings>
-                                <b:includable id='main'>
-  <!-- only display title if it's non-empty -->
-  <b:if cond='data:title != &quot;&quot;'>
-    <h2 class='title'><data:title/></h2>
-  </b:if>
-  <div class='widget-content'>
-    <data:content/>
-  </div>
-
-  <b:include name='quickedit'/>
-</b:includable>
-                              </b:widget>
-                              <b:widget id='BlogSearch1' locked='false' title='搜尋此網誌' type='BlogSearch'>
-                                <b:includable id='main'>
-    <!-- only display title if it's non-empty -->
-    <b:if cond='data:title != &quot;&quot;'>
-      <h2 class='title'><data:title/></h2>
-    </b:if>
-
-    <div class='widget-content'>
-      <div expr:id='data:widget.instanceId + &quot;_form&quot;'>
-        <form class='gsc-search-box' expr:action='data:blog.searchUrl'>
-          <b:attr cond='not data:view.isPreview' name='target' value='_top'/>
-          <table cellpadding='0' cellspacing='0' class='gsc-search-box'>
-            <tbody>
-              <tr>
-                <td class='gsc-input'>
-                  <input autocomplete='off' class='gsc-input' expr:value='data:view.isSearch ? data:view.search.query.escaped : &quot;&quot;' name='q' size='10' title='search' type='text'/>
-                </td>
-                <td class='gsc-search-button'>
-                  <input class='gsc-search-button' expr:value='data:messages.search' title='search' type='submit'/>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </form>
-      </div>
-    </div>
-
-    <b:include name='quickedit'/>
-  </b:includable>
-                              </b:widget>
-                              <b:widget id='Header1' locked='false' title='半夜摸黑翻冰箱 (標頭)' type='Header'>
-                                <b:widget-settings>
-                                  <b:widget-setting name='displayUrl'/>
-                                  <b:widget-setting name='displayHeight'>0</b:widget-setting>
-                                  <b:widget-setting name='sectionWidth'>-1</b:widget-setting>
-                                  <b:widget-setting name='useImage'>false</b:widget-setting>
-                                  <b:widget-setting name='shrinkToFit'>false</b:widget-setting>
-                                  <b:widget-setting name='imagePlacement'>BEHIND</b:widget-setting>
-                                  <b:widget-setting name='displayWidth'>0</b:widget-setting>
-                                </b:widget-settings>
-                                <b:includable id='main'>
-
-  <b:if cond='data:useImage'>
-    <b:if cond='data:imagePlacement == &quot;BEHIND&quot;'>
-      <!--
-      Show image as background to text. You can't really calculate the width
-      reliably in JS because margins are not taken into account by any of
-      clientWidth, offsetWidth or scrollWidth, so we don't force a minimum
-      width if the user is using shrink to fit.
-      This results in a margin-width's worth of pixels being cropped. If the
-      user is not using shrink to fit then we expand the header.
-      -->
-      <b:if cond='data:mobile'>
-        <div id='header-inner'>
-          <div class='titlewrapper' style='background: transparent'>
-            <h1 class='title' style='background: transparent; border-width: 0px'>
-              <b:include name='title'/>
-            </h1>
-          </div>
-          <b:include name='description'/>
-        </div>
-      <b:else/>
-        <div expr:style='&quot;background-image: url(\&quot;&quot; + data:sourceUrl + &quot;\&quot;); &quot;                      + &quot;background-position: &quot;                      + data:backgroundPositionStyleStr + &quot;; &quot;                      + data:widthStyleStr                      + &quot;min-height: &quot; + data:height                      + &quot;_height: &quot; + data:height                      + &quot;background-repeat: no-repeat; &quot;' id='header-inner'>
-          <div class='titlewrapper' style='background: transparent'>
-            <h1 class='title' style='background: transparent; border-width: 0px'>
-              <b:include name='title'/>
-            </h1>
-          </div>
-          <b:include name='description'/>
-        </div>
-      </b:if>
-    <b:else/>
-      <!--Show the image only-->
-      <div id='header-inner'>
-        <a expr:href='data:blog.homepageUrl' style='display: block'>
-          <img expr:alt='data:title' expr:height='data:height' expr:id='data:widget.instanceId + &quot;_headerimg&quot;' expr:src='data:sourceUrl' expr:width='data:width' style='display: block'/>
-        </a>
-        <!--Show the description-->
-        <b:if cond='data:imagePlacement == &quot;BEFORE_DESCRIPTION&quot;'>
-          <b:include name='description'/>
-        </b:if>
-      </div>
-    </b:if>
-  <b:else/>
-    <!--No header image -->
-    <div id='header-inner'>
-      <div class='titlewrapper'>
-        <h1 class='title'>
-          <b:include name='title'/>
-        </h1>
-      </div>
-      <b:include name='description'/>
-    </div>
-  </b:if>
-</b:includable>
-                                <b:includable id='description'>
-  <div class='descriptionwrapper'>
-    <p class='description'><span><data:description/></span></p>
-  </div>
-</b:includable>
-                                <b:includable id='title'>
-  <b:tag cond='data:blog.url != data:blog.homepageUrl' expr:href='data:blog.homepageUrl' name='a'>
-    <data:title/>
-  </b:tag>
-</b:includable>
-                              </b:widget>
-                              <b:widget id='PageList1' locked='false' title='' type='PageList'>
-                                <b:widget-settings>
-                                  <b:widget-setting name='pageListJson'><![CDATA[{"home":{"href":"http://aromaaulait.blogspot.com/","position":0,"title":"首頁"}}]]></b:widget-setting>
-                                  <b:widget-setting name='homeTitle'>首頁</b:widget-setting>
-                                </b:widget-settings>
-                                <b:includable id='main'>
-  <b:if cond='data:title != &quot;&quot;'><h2><data:title/></h2></b:if>
-  <div class='widget-content'>
-    <b:if cond='data:mobile'>
-      <select expr:id='data:widget.instanceId + &quot;_select&quot;'>
-        <b:if cond='data:showPlaceholder'>
-          <option disabled='disabled' hidden='hidden' value=''>
-            <b:attr cond='!data:hasCurrentPage' name='selected' value='selected'/>
-            <b:message name='messages.moveToPage'/>
-          </option>
-        </b:if>
-        <b:loop values='data:links' var='link'>
-          <option expr:value='data:link.href'>
-            <b:attr cond='data:link.isCurrentPage' name='selected' value='selected'/>
-            <data:link.title/>
-          </option>
-        </b:loop>
-      </select>
-      <span class='pagelist-arrow'>&amp;#9660;</span>
-    <b:else/>
-      <ul>
-        <b:loop values='data:links' var='link'>
-          <li>
-            <b:class cond='data:link.isCurrentPage' name='selected'/>
-            <a expr:href='data:link.href'><data:link.title/></a>
-          </li>
-        </b:loop>
-      </ul>
-    </b:if>
-    <b:include name='quickedit'/>
-  </div>
-</b:includable>
-                              </b:widget>
-                              <b:widget id='Attribution1' locked='false' title='' type='Attribution'>
-                                <b:widget-settings>
-                                  <b:widget-setting name='copyright'/>
-                                </b:widget-settings>
-                                <b:includable id='main'>
-    <div class='widget-content' style='text-align: center;'>
-      <b:if cond='data:attribution != &quot;&quot;'>
-       <data:attribution/>
-      </b:if>
-    </div>
-
-    <b:include name='quickedit'/>
-  </b:includable>
-                              </b:widget>
-                              <b:widget id='Profile1' locked='false' title='關於我自己' type='Profile'>
-                                <b:widget-settings>
-                                  <b:widget-setting name='showaboutme'>false</b:widget-setting>
-                                  <b:widget-setting name='showlocation'>false</b:widget-setting>
-                                </b:widget-settings>
-                                <b:includable id='main'>
-    <b:if cond='data:title != &quot;&quot;'>
-      <h2><data:title/></h2>
-    </b:if>
-    <div class='widget-content'>
-    <b:if cond='data:team'> <!-- team blog profile -->
-      <ul>
-        <b:loop values='data:authors' var='i'>
-          <li><a class='profile-name-link g-profile' expr:href='data:i.userUrl' expr:style='&quot;background-image: url(&quot; + data:i.profileLogo + &quot;);&quot;'><data:i.display-name/></a></li>
-        </b:loop>
-      </ul>
-
-    <b:else/> <!-- normal blog profile -->
-
-      <b:if cond='data:photo.url != &quot;&quot;'>
-        <a expr:href='data:userUrl'><img class='profile-img' expr:alt='data:messages.myPhoto' expr:height='data:photo.height' expr:src='data:photo.url' expr:width='data:photo.width'/></a>
-      </b:if>
-
-      <dl class='profile-datablock'>
-        <dt class='profile-data'>
-          <a class='profile-name-link g-profile' expr:href='data:userUrl' expr:style='&quot;background-image: url(&quot; + data:profileLogo + &quot;);&quot;' rel='author'>
-            <data:displayname/>
-          </a>
-        </dt>
-
-        <b:if cond='data:showlocation'>
-          <dd class='profile-data'><data:location/></dd>
-        </b:if>
-
-        <b:if cond='data:aboutme != &quot;&quot;'><dd class='profile-textblock'><data:aboutme/></dd></b:if>
-      </dl>
-      <a class='profile-link' expr:href='data:userUrl' rel='author'><data:viewProfileMsg/></a>
-    </b:if>
-
-     <b:include name='quickedit'/>
-    </div>
-  </b:includable>
-                              </b:widget>
-                              <b:widget id='BlogArchive1' locked='false' title='' type='BlogArchive'>
-                                <b:widget-settings>
-                                  <b:widget-setting name='showStyle'>HIERARCHY</b:widget-setting>
-                                  <b:widget-setting name='yearPattern'>yyyy</b:widget-setting>
-                                  <b:widget-setting name='showWeekEnd'>true</b:widget-setting>
-                                  <b:widget-setting name='monthPattern'>MMMM</b:widget-setting>
-                                  <b:widget-setting name='dayPattern'>MMM dd</b:widget-setting>
-                                  <b:widget-setting name='weekPattern'>MM/dd</b:widget-setting>
-                                  <b:widget-setting name='chronological'>false</b:widget-setting>
-                                  <b:widget-setting name='showPosts'>true</b:widget-setting>
-                                  <b:widget-setting name='frequency'>MONTHLY</b:widget-setting>
-                                </b:widget-settings>
-                                <b:includable id='main'>
-  <b:if cond='data:title != &quot;&quot;'>
-    <h2><data:title/></h2>
-  </b:if>
-  <div class='widget-content'>
-  <div id='ArchiveList'>
-  <div expr:id='data:widget.instanceId + &quot;_ArchiveList&quot;'>
-    <b:include cond='data:style == &quot;HIERARCHY&quot;' data='data' name='interval'/>
-    <b:include cond='data:style == &quot;FLAT&quot;' data='data' name='flat'/>
-    <b:include cond='data:style == &quot;MENU&quot;' data='data' name='menu'/>
-  </div>
-  </div>
-  <b:include name='quickedit'/>
-  </div>
-</b:includable>
-                                <b:includable id='flat' var='data'>
-  <ul class='flat'>
-    <b:loop values='data:data' var='i'>
-      <li class='archivedate'>
-        <a expr:href='data:i.url'><data:i.name/></a> (<data:i.post-count/>)
-      </li>
-    </b:loop>
-  </ul>
-</b:includable>
-                                <b:includable id='interval' var='intervalData'>
-  <b:loop values='data:intervalData' var='interval'>
-    <ul class='hierarchy'>
-      <li expr:class='&quot;archivedate &quot; + data:interval.expclass'>
-        <b:include cond='data:interval.toggleId' data='interval' name='toggle'/>
-        <a class='post-count-link' expr:href='data:interval.url'>
-          <data:interval.name/>
-        </a>
-        <span class='post-count' dir='ltr'>(<data:interval.post-count/>)</span>
-        <b:include cond='data:interval.data' data='interval.data' name='interval'/>
-        <b:include cond='data:interval.posts' data='interval.posts' name='posts'/>
-      </li>
-    </ul>
-  </b:loop>
-</b:includable>
-                                <b:includable id='menu' var='data'>
-  <select expr:id='data:widget.instanceId + &quot;_ArchiveMenu&quot;'>
-    <option value=''><data:title/></option>
-    <b:loop values='data:data' var='i'>
-      <option expr:value='data:i.url'><data:i.name/> (<data:i.post-count/>)</option>
-    </b:loop>
-  </select>
-</b:includable>
-                                <b:includable id='posts' var='posts'>
-  <ul class='posts'>
-    <b:loop values='data:posts' var='post'>
-      <li><a expr:href='data:post.url'><data:post.title/></a></li>
-    </b:loop>
-  </ul>
-</b:includable>
-                                <b:includable id='toggle' var='interval'>
-  <a class='toggle' href='javascript:void(0)'>
-    <span expr:class='&quot;zippy&quot; + (data:interval.expclass == &quot;expanded&quot; ? &quot; toggle-open&quot; : &quot;&quot;)'>
-      <b:if cond='data:interval.expclass == &quot;expanded&quot;'>
-        &#9660;&#160;
-      <b:elseif cond='data:blog.languageDirection == &quot;rtl&quot;'/>
-        &#9668;&#160;
-      <b:else/>
-        &#9658;&#160;
-      </b:if>
-    </span>
-  </a>
-</b:includable>
-                              </b:widget>
-                              <b:widget id='Label1' locked='false' title='標籤' type='Label'>
-                                <b:widget-settings>
-                                  <b:widget-setting name='sorting'>ALPHA</b:widget-setting>
-                                  <b:widget-setting name='display'>LIST</b:widget-setting>
-                                  <b:widget-setting name='selectedLabelsList'/>
-                                  <b:widget-setting name='showType'>ALL</b:widget-setting>
-                                  <b:widget-setting name='showFreqNumbers'>false</b:widget-setting>
-                                </b:widget-settings>
-                                <b:includable id='main'>
-  <b:if cond='data:title != &quot;&quot;'>
-    <h2><data:title/></h2>
-  </b:if>
-  <div expr:class='&quot;widget-content &quot; + data:display + &quot;-label-widget-content&quot;'>
-    <b:if cond='data:display == &quot;list&quot;'>
-      <ul>
-        <b:loop values='data:labels' var='label'>
-          <li>
-            <b:if cond='data:blog.url == data:label.url'>
-              <span expr:dir='data:blog.languageDirection'><data:label.name/></span>
-            <b:else/>
-              <a expr:dir='data:blog.languageDirection' expr:href='data:label.url'><data:label.name/></a>
-            </b:if>
-            <b:if cond='data:showFreqNumbers'>
-              <span dir='ltr'>(<data:label.count/>)</span>
-            </b:if>
-          </li>
-        </b:loop>
-      </ul>
-    <b:else/>
-      <b:loop values='data:labels' var='label'>
-        <span expr:class='&quot;label-size label-size-&quot; + data:label.cssSize'>
-          <b:if cond='data:blog.url == data:label.url'>
-            <span expr:dir='data:blog.languageDirection'><data:label.name/></span>
-          <b:else/>
-            <a expr:dir='data:blog.languageDirection' expr:href='data:label.url'><data:label.name/></a>
-          </b:if>
-          <b:if cond='data:showFreqNumbers'>
-            <span class='label-count' dir='ltr'>(<data:label.count/>)</span>
-          </b:if>
-        </span>
-      </b:loop>
-    </b:if>
-    <b:include name='quickedit'/>
-  </div>
-</b:includable>
-                              </b:widget>
-                              <b:widget id='ReportAbuse1' locked='false' title='' type='ReportAbuse'>
-                                <b:includable id='main'>
-  <b:include name='reportAbuse'/>
-</b:includable>
-                              </b:widget>
-                              <b:widget id='Image1' locked='false' title='CC Taiwan' type='Image'>
-                                <b:widget-settings>
-                                  <b:widget-setting name='displayUrl'>http://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-nd.png</b:widget-setting>
-                                  <b:widget-setting name='displayHeight'>91</b:widget-setting>
-                                  <b:widget-setting name='sectionWidth'>260</b:widget-setting>
-                                  <b:widget-setting name='shrinkToFit'>true</b:widget-setting>
-                                  <b:widget-setting name='displayWidth'>260</b:widget-setting>
-                                  <b:widget-setting name='link'/>
-                                  <b:widget-setting name='caption'/>
-                                </b:widget-settings>
-                                <b:includable id='main'>
-    <b:if cond='data:title != &quot;&quot;'>
-      <h2><data:title/></h2>
-    </b:if>
-    <div class='widget-content'>
-      <b:tag cond='data:link' expr:href='data:link' name='a'>
-        <img expr:alt='data:title' expr:height='data:height' expr:id='data:widget.instanceId + &quot;_img&quot;' expr:src='data:sourceUrl' expr:width='data:width'/>
-      </b:tag>
-      <br/>
-      <b:if cond='data:caption'>
-        <span class='caption'><data:caption/></span>
-      </b:if>
-    </div>
-    <b:include name='quickedit'/>
-  </b:includable>
-                              </b:widget>
-                            </b:section>
-                          </aside>
-                        </div>
-                      </div>
-                      <div style='clear: both'/>
                     </div>
                   </div>
                 </div>
@@ -1617,50 +1220,6 @@ Name: Dynamic Views
             </div>
           </div>
         </div>
-      </div>
-      <script language='javascript' type='text/javascript'>
-        window.onload = function() {
-          blogger.ui().configure().view();
-        };
-      </script>
-    <b:else/>
-      <h2><b:message name='messages.dynamicViewsNotAvailable'/></h2>
-    </b:if>
-    <script type='text/javascript'>
-      //<![CDATA[
-      (function() {
-        // 1. 加入 true (捕獲階段) 以及 closest()，確保絕對能搶在 Blogger 攔截前執行
-        document.addEventListener('click', function(e) {
-          // 使用 closest 確保即使點到文字本身，也能精準抓到外層的 span
-          var target = e.target.closest ? e.target.closest('.folder-toggle') : null;
-          
-          if (target) {
-            // 【關鍵】強制阻止 Blogger 的原生腳本攔截這個點擊，並防止預設跳轉
-            e.stopPropagation();
-            e.preventDefault();
-
-            var parent = target.parentElement;
-            parent.classList.toggle('open');
-            
-            if (parent.classList.contains('open')) {
-              target.innerText = target.innerText.replace('➕', '➖');
-            } else {
-              target.innerText = target.innerText.replace('➖', '➕');
-            }
-          }
-        }, true); // <--- 這裡的 true 是擊敗 Dynamic Views 的終極關鍵
-
-        // 2. 自動死守隱藏原生 Label1 小工具的機制
-        function hideOriginalLabel() {
-          var originalLabel = document.getElementById('Label1') || document.querySelector('.widget.Label');
-          if (originalLabel && originalLabel.style.display !== 'none') {
-            originalLabel.style.display = 'none';
-          }
-        }
-        var labelHideObserver = new MutationObserver(hideOriginalLabel);
-        labelHideObserver.observe(document.body, { childList: true, subtree: true });
-      })();
-      //]]>
-    </script>
-  </body>
+      </b:if>
+    </b:body>
 </html>
